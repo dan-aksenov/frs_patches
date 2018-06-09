@@ -102,6 +102,5 @@ class ApplicationUpdate:
                     self.deal_with_tomcat( application_host, 'tomcat', 'started' )
                 print "Waiting 30 seconds for application to (re)deploy..."
                 sleep(30)
-
             else:
                 print "Something else"
