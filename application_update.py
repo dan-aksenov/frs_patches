@@ -6,7 +6,7 @@ from utils import Deal_with_linux
 from time import sleep
 
 class ApplicationUpdate:
-    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars ):
+    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars, update_online = False ):
         # intermediate host with ansible installation.
         self.jump_host = jump_host
         self.patch_num = patch_num
@@ -20,6 +20,7 @@ class ApplicationUpdate:
         self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
+        self.update_online = update_online
         self.linux = Deal_with_linux()
             
     def get_ansible_result( self, paramiko_result ):
@@ -77,20 +78,22 @@ class ApplicationUpdate:
                 print "\tApplications version on "+ application_host +" already " + self.patch_num
                 sys.exit()
             elif not apps_to_update == []:
-                self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
+                if update_online == False:
+                    self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
                 for war in apps_to_update:
                     # Remove deployed folders.
-                    paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
+                    if update_online == False:
+                        paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
                     # Perform war copy.
                     print "Attempt to copy "+ war[1] + " to " + application_host + "..."
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src='  + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --become --become-user=tomcat' )
-                    # TODO supress if particular app not needs updating
                     if 'SUCCESS' in paramiko_result:
                         print "\tSuccesfully updated application " + war[1] + " on " + application_host
                     else:
                         print paramiko_result
                         sys.exit
-                # neet to variablize tomcat service name
+                # need to variablize tomcat service name
+                # Attempt to start tomcat anyway, regardless of update_online
                 self.deal_with_tomcat( application_host, 'tomcat', 'started' )
                 print "Waiting 30 seconds for application to (re)deploy..."
                 sleep(30)
