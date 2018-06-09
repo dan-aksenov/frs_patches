@@ -45,7 +45,7 @@ db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 # temporary directory to hold database patches.
 stage_dir = 'd:/tmp/skpdi_patch'
-update_online = False
+update_online = True
 
 d = PatchDatabase(
     patch_num,
