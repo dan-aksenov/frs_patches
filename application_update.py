@@ -2,7 +2,7 @@ import sys
 import json
 import os
 from glob import glob
-from utils import Deal_with_linux
+from utils import Deal_with_linux, Bcolors
 from time import sleep
 
 class ApplicationUpdate:
@@ -34,7 +34,7 @@ class ApplicationUpdate:
         try:
             ansible_result = json.loads(a[a.find("{"):])
         except:
-            print 'ERROR: ' + paramiko_result
+            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + + Bcolors.ENDC )
         return ansible_result
     
     def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
@@ -45,12 +45,12 @@ class ApplicationUpdate:
         a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
         ansible_result = self.get_ansible_result(a)
         if ansible_result['state'] == tomcat_state:
-            print "OK: Tomcat " + tomcat_state
+            print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )
         elif ansible_result['state'] <> tomcat_state:
-            print "FAIL: tomcat not " + tomcat_state + "!"
+            print ( Bcolors.FAIL + "FAIL: tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
             sys.exit()
         else:
-            print "FAIL: Error determining tomcat state!"
+            print ( Bcolors.FAIL + "FAIL: Error determining tomcat state!" +  Bcolors.ENDC )
             sys.exit()
 
     def application_update( self ):
@@ -70,21 +70,21 @@ class ApplicationUpdate:
                             print "\t"+ war[1] + " application needs to be updated."
                             apps_to_update.append(war)
                     elif 'FAILED' in paramiko_result:
-                        print paramiko_result
+                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit()
                     else:
-                        print paramiko_result
+                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit()
                 else:
                     print( "\tNOTICE: Unable to find " + self.sunny_patch + war[0] + ". Assume it's not required." )
             if apps_to_update == []:
-                print "\tApplications version on "+ application_host +" already " + self.patch_num
+                print ( Bcolors.OKGREEN + "\tApplications version on "+ application_host +" already " + self.patch_num + Bcolors.ENDC )
                 sys.exit()
             elif not apps_to_update == []:
                 if self.update_online == False:
                     self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
                 else:
-                    print( "Application will be updated online..." )
+                    print( "NOTICE: Application will be updated online..." )
                 for war in apps_to_update:
                     # Remove deployed folders.
                     if self.update_online == False:
@@ -95,7 +95,7 @@ class ApplicationUpdate:
                     if 'SUCCESS' in paramiko_result:
                         print "\tSuccesfully updated application " + war[1] + " on " + application_host
                     else:
-                        print paramiko_result
+                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit
                 # need to variablize tomcat service name
                 if self.update_online == False:
