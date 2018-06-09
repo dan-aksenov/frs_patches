@@ -45,6 +45,7 @@ db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 # temporary directory to hold database patches.
 stage_dir = 'd:/tmp/skpdi_patch'
+update_online = False
 
 d = PatchDatabase(
     patch_num,
@@ -68,7 +69,8 @@ a = ApplicationUpdate(
     application_path,
     tomcat_name,
     ansible_inventory,
-    wars
+    wars,
+    update_online
    )
 
 a.application_update()

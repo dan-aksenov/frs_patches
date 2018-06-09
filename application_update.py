@@ -6,7 +6,7 @@ from utils import Deal_with_linux
 from time import sleep
 
 class ApplicationUpdate:
-    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars, update_online = False ):
+    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars, update_online=None ):
         # intermediate host with ansible installation.
         self.jump_host = jump_host
         self.patch_num = patch_num
@@ -20,11 +20,13 @@ class ApplicationUpdate:
         self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
+        if update_online is None:
+            update_online = False
         self.update_online = update_online
         self.linux = Deal_with_linux()
             
     def get_ansible_result( self, paramiko_result ):
-        ''' Convert paramiko result(string) to json '''
+        ''' Convert ansible-paramiko result(string) to json '''
         
         a = paramiko_result
         #ansible_result = json.loads(a[a.find("{"):a.find("}")+1])
@@ -36,7 +38,8 @@ class ApplicationUpdate:
         return ansible_result
     
     def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
-        ''' tomcat_name is systemd service name '''
+        ''' Start/stop tomcat application server
+        variable: tomcat_name is systemd service name '''
     
         print "Attempting to make tomcat " + tomcat_state + "..."
         a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
@@ -51,7 +54,7 @@ class ApplicationUpdate:
             sys.exit()
 
     def application_update( self ):
-        
+        ''' Update application '''
         for application_host in self.application_hosts:
             print "Checking application files on " + application_host +":"
             # apps_to_update will hold application names to be updated, so uptodate applications won't be undeployed.
@@ -78,11 +81,13 @@ class ApplicationUpdate:
                 print "\tApplications version on "+ application_host +" already " + self.patch_num
                 sys.exit()
             elif not apps_to_update == []:
-                if update_online == False:
+                if self.update_online == False:
                     self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
+                else:
+                    print( "Application will be updated online..." )
                 for war in apps_to_update:
                     # Remove deployed folders.
-                    if update_online == False:
+                    if self.update_online == False:
                         paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
                     # Perform war copy.
                     print "Attempt to copy "+ war[1] + " to " + application_host + "..."
@@ -93,8 +98,8 @@ class ApplicationUpdate:
                         print paramiko_result
                         sys.exit
                 # need to variablize tomcat service name
-                # Attempt to start tomcat anyway, regardless of update_online
-                self.deal_with_tomcat( application_host, 'tomcat', 'started' )
+                if self.update_online == False:
+                    self.deal_with_tomcat( application_host, 'tomcat', 'started' )
                 print "Waiting 30 seconds for application to (re)deploy..."
                 sleep(30)
 
