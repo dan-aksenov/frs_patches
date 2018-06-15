@@ -41,7 +41,7 @@ class ApplicationUpdate:
         ''' Start/stop tomcat application server
         variable: tomcat_name is systemd service name '''
     
-        print "Attempting to make tomcat " + tomcat_state + "..."
+        print "Ensuring tomcat is " + tomcat_state + "..."
         a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
         ansible_result = self.get_ansible_result(a)
         if ansible_result['state'] == tomcat_state:
@@ -98,8 +98,8 @@ class ApplicationUpdate:
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit
                 # need to variablize tomcat service name
-                if self.update_online == False:
-                    self.deal_with_tomcat( application_host, 'tomcat', 'started' )
+                # Ensure tomcat is started.
+                self.deal_with_tomcat( application_host, 'tomcat', 'started' )
                 print "Waiting 30 seconds for application to (re)deploy..."
                 sleep(30)
             else:
