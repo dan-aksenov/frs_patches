@@ -30,7 +30,7 @@ class ApplicationUpdate:
         
         a = paramiko_result
         #ansible_result = json.loads(a[a.find("{"):a.find("}")+1])
-        # upper works incorrectly with multiple nested {}. Not shure if we need to propper terminate on last }?
+        # upper string works incorrectly with multiple nested {}. Not shure if we need to propper terminate on last }?
         try:
             ansible_result = json.loads(a[a.find("{"):])
         except:
@@ -39,7 +39,9 @@ class ApplicationUpdate:
     
     def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
         ''' Start/stop tomcat application server
-        variable: tomcat_name is systemd service name '''
+        variables:
+           - tomcat_name is systemd service name
+           - tomcat_state - tomcat desired state i.e stopped, started etc. '''
     
         print "Ensuring tomcat is " + tomcat_state + "..."
         a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
