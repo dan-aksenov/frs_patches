@@ -1,6 +1,7 @@
 from application_update import ApplicationUpdate
 from patch_database import PatchDatabase
 import utils
+from skpdi_web import check_webpage
 
 from getopt import getopt
 import sys
@@ -68,3 +69,8 @@ a = ApplicationUpdate(
     )
 
 a.application_update()
+
+print("Chekcking application version:")
+for host in application_hosts:
+    for app in wars:
+        check_webpage(patch_num, host, app[1])
