@@ -27,7 +27,7 @@ jump_host = "oemcc.fors.ru"
 application_hosts = ['gudhskpdi-predprod']
 # // so windows can also read in correctly
 sunny_path = '//sunny/builds/odsxp/'
-application_path = '/u01/apache-tomcat-8.5.8/webapps/'
+application_path = '/u01/apache-tomcat-8.5.32/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/skpdi-prod'
 wars = [
@@ -36,7 +36,7 @@ wars = [
     ]
 
 db_host = 'gudhskpdi-predprod'
-db_name = 'ods_predprod'
+db_name = 'predprod'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = 'd:/tmp/skpdi_patch'
