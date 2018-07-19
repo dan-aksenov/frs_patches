@@ -95,6 +95,7 @@ class PatchDatabase:
                         patches_miss.append(i)
     
                 print "Following database patches will be applied: " + ', '.join(patches_miss) + "\n"
+                raw_input("Press Enter to continue...")
                 for i in patches_miss:
                 # Copy needed patches from Sunny.
                     shutil.copytree(self.sunny_patch + '\\patches\\' + i, self.stage_dir + '\\patches\\' + i)
