@@ -34,7 +34,7 @@ class ApplicationUpdate:
         try:
             ansible_result = json.loads(a[a.find("{"):])
         except:
-            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + + Bcolors.ENDC )
+            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + ' ' + Bcolors.ENDC )
         return ansible_result
     
     def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
