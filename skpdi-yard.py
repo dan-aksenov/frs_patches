@@ -24,7 +24,7 @@ for opt, arg in opts:
 # Variables
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-test-app']
+application_hosts = ['gudhskpdi-app-03']
 # // so windows can also read in correctly
 sunny_path = '//sunny/builds/odsxp/'
 application_path = '/u01/apache-tomcat-8.5.8/webapps/'
@@ -35,7 +35,7 @@ wars = [
     ['ext-' + patch_num + '.war', 'ext-predprod']
     ]
 
-db_host = 'gudhskpdi-db-test'
+db_host = 'gudhskpdi-db-03'
 db_name = 'ods_predprod'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
