@@ -24,12 +24,14 @@ for opt, arg in opts:
 # host to run ansible commands from
 jump_host = "oemcc.fors.ru"
 ansible_inventory = '~/ansible-hosts/pts-test'
-# application hosts as writen in ansible invenrory  
-application_hosts = ['pts-tst-as1']
+sunny_path = '//sunny/builds/pts/'
+
+# for CU
+application_hosts = ['pts-tst-cu']
 # // so windows can also read it correctly, same as linux
 sunny_path = '//sunny/builds/pts/'
 # tomcat application location
-application_path = '/opt/apache-tomcat-8.5.27/webapps/'
+application_path = '/u01/apache-tomcat-8.5.23/webapps'
 # sysinit or systemd service name to stop/start server
 tomcat_name = 'tomcat'
 # war files mappings
@@ -38,7 +40,6 @@ wars = [
     ['pts-public-' + patch_num + '.war', 'mobile'],
     ['pts-restricted-' + patch_num + '.war', 'pts'],
     ['pts-portal-' + patch_num + '.war', 'portal'],
-    ['pts-jointstorage-' + patch_num + '.war', 'jointstorage']
     ]
     
 db_host = '172.29.7.200'
@@ -48,6 +49,7 @@ db_user = 'pts'
 patch_table = 'parameter.fdc_patches_log'
 # temporary directory to hold database patches.
 stage_dir = 'd:/tmp/pts'
+
 '''
 d = PatchDatabase(
     patch_num,
