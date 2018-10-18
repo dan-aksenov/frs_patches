@@ -16,7 +16,7 @@ import re
 import requests
 
 #Custom utilities
-from utils import md5_check, recreate_dir, Deal_with_linux, postgres_exec, Bcolors
+from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
     
 # NOTE: purge_panels to be moved to skpdi specific.
 
@@ -66,7 +66,7 @@ class PatchDatabase:
         Database patching
         '''
         # Get list of already applied patches
-        # Function returns list tuples + row count, right now need only tuples, so [0]
+        # Function postgres_exec returns list - tuples + row count, here need only tuples, so [0]
         patches_curr = postgres_exec ( self.db_host, self.db_name,  'select name from '+ self.patch_table +' order by id desc;' )[0]
     
         # Get list of patches from from Sunny
@@ -95,6 +95,7 @@ class PatchDatabase:
                         patches_miss.append(i)
     
                 print "Following database patches will be applied: " + ', '.join(patches_miss) + "\n"
+                raw_input("Press Enter to continue...")
                 for i in patches_miss:
                 # Copy needed patches from Sunny.
                     shutil.copytree(self.sunny_patch + '\\patches\\' + i, self.stage_dir + '\\patches\\' + i)

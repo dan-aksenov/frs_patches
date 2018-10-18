@@ -22,29 +22,23 @@ for opt, arg in opts:
         sys.exit()
 
 # Variables
-# host to run ansible commands from
 jump_host = "oemcc.fors.ru"
-ansible_inventory = '~/ansible-hosts/skpdi-prod'
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-app-02', 'gudhskpdi-app-01']
-# // so windows can also read it correctly, same as linux
+application_hosts = ['gudhskpdi-app-03']
+# // so windows can also read in correctly
 sunny_path = '//sunny/builds/odsxp/'
-# tomcat application location
 application_path = '/u01/apache-tomcat-8.5.8/webapps/'
-# sysinit or systemd service name to stop/start server
 tomcat_name = 'tomcat'
-# war files mappings
+ansible_inventory = '~/ansible-hosts/skpdi-prod'
 wars = [
-    ['skpdi-' + patch_num + '.war', 'skpdi'],
-    ['ext-' + patch_num + '.war', 'ext']
+    ['skpdi-' + patch_num + '.war', 'predprod'],
+    ['ext-' + patch_num + '.war', 'ext-predprod']
     ]
 
-db_host = 'gudhskpdi-db-01'
-db_name = 'ods_prod'
+db_host = 'gudhskpdi-db-03'
+db_name = 'ods_predprod'
 db_user = 'ods'
-# databaes table to look for current db_version
 patch_table = 'parameter.fdc_patches_log'
-# temporary directory to hold database patches.
 stage_dir = 'd:/tmp/skpdi_patch'
 update_online = True
 
@@ -58,7 +52,7 @@ d = PatchDatabase(
     stage_dir,
     db_user,
     patch_table
-   )
+    )
 
 d.patchdb()
 
@@ -72,7 +66,7 @@ a = ApplicationUpdate(
     ansible_inventory,
     wars,
     update_online
-   )
+    )
 
 a.application_update()
 
