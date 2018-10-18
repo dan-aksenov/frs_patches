@@ -1,6 +1,7 @@
 from application_update import ApplicationUpdate
 from patch_database import PatchDatabase
 import utils
+from skpdi_web import check_webpage
 
 from getopt import getopt
 import sys
@@ -23,10 +24,10 @@ for opt, arg in opts:
 # Variables
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-test-app']
+application_hosts = ['gudhskpdi-predprod']
 # // so windows can also read in correctly
 sunny_path = '//sunny/builds/odsxp/'
-application_path = '/u01/apache-tomcat-8.5.8/webapps/'
+application_path = '/opt/apache-tomcat-8.5.32/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/skpdi-prod'
 wars = [
@@ -34,11 +35,12 @@ wars = [
     ['ext-' + patch_num + '.war', 'ext-predprod']
     ]
 
-db_host = 'gudhskpdi-db-test'
-db_name = 'ods_predprod'
+db_host = 'gudhskpdi-predprod'
+db_name = 'predprod'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = 'd:/tmp/skpdi_patch'
+update_online = True
 
 d = PatchDatabase(
     patch_num,
@@ -62,7 +64,13 @@ a = ApplicationUpdate(
     application_path,
     tomcat_name,
     ansible_inventory,
-    wars
+    wars,
+    update_online
     )
 
 a.application_update()
+
+print("Chekcking application version:")
+for host in application_hosts:
+    for app in wars:
+        check_webpage(patch_num, host, app[1])
