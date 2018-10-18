@@ -56,11 +56,7 @@ class ApplicationUpdate:
             sys.exit()
 
     def application_update( self ):
-<<<<<<< HEAD
-        
-=======
         ''' Update application '''
->>>>>>> tomcat.online.update
         for application_host in self.application_hosts:
             print "Checking application files on " + application_host +":"
             # apps_to_update will hold application names to be updated, so uptodate applications won't be undeployed.
@@ -76,17 +72,10 @@ class ApplicationUpdate:
                             print "\t"+ war[1] + " application needs to be updated."
                             apps_to_update.append(war)
                     elif 'FAILED' in paramiko_result:
-<<<<<<< HEAD
-                        print paramiko_result
-                        sys.exit()
-                    else:
-                        print paramiko_result
-=======
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit()
                     else:
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
->>>>>>> tomcat.online.update
                         sys.exit()
                 else:
                     print( "\tNOTICE: Unable to find " + self.sunny_patch + war[0] + ". Assume it's not required." )
