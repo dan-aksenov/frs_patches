@@ -7,7 +7,7 @@ PGUSER=$3
 #set PGPASSWORD=ods
 
 #Set database name from second parameter
-PGDATABASE=$52
+PGDATABASE=$2
 
 # Install patch
 psql -f intall.sql &>install.log
