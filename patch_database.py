@@ -14,6 +14,8 @@ import shutil
 import os
 import re
 import requests
+# stat for chmod
+import stat
 
 #Custom utilities
 from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
@@ -101,6 +103,7 @@ class PatchDatabase:
                     shutil.copytree(self.sunny_patch + '/patches/' + i, self.stage_dir + '/patches/' + i)
                 # Place patch installer to patch subdirectories.
                     shutil.copy(self.db_patch_file , self.stage_dir + '/patches/' + i)
+                    os.chmod( self.stage_dir + '/patches/' + i + '/' + self.db_patch_file , stat.S_IRWXU)
     
             # Stop tomcat.
                 for i in self.application_hosts:
