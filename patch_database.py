@@ -80,7 +80,7 @@ class PatchDatabase:
             print "/nChecking database patch level:"
             # To handle file name suffixes for directories like "db_0190_20171113_v2.19" additional variable declared to hold max(patches_targ)
             last_patch_targ = max( patches_targ )
-            last_patch_targ_strip = re.findall('db_.*_/d{8}', last_patch_targ)[0] # findall returns list
+            last_patch_targ_strip = re.findall('db_.*_[0-9]{8}', last_patch_targ)[0] # findall returns list
             if last_patch_targ_strip == max(patches_curr):
                 print "/tDatabase patch level: " + max(patches_curr) 
                 print "/tLatest patch on Sunny: " + last_patch_targ_strip
