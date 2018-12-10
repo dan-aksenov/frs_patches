@@ -22,7 +22,7 @@ class Bcolors:
 
 class Deal_with_linux:
     def __init__(self):
-        self.linux_key_path = os.getenv('HOME') + '\\.ssh\\id_rsa.key'
+        self.linux_key_path = os.getenv('HOME') + '/.ssh/id_rsa'
         if not os.path.isfile(self.linux_key_path):
             print Bcolors.FAIL + "\nERROR: Linux ssh key not found!" + Bcolors.ENDC
             print "HINT: Make sure \"" + self.linux_key_path + "\" exists."
