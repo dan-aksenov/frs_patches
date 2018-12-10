@@ -27,7 +27,7 @@ jump_host = "oemcc.fors.ru"
 application_hosts = ['centos7-test-1']
 # // so windows can also read in correctly
 sunny_path = '/sunny/builds/odsxp/'
-application_path = '/opt/apache-tomcat-8.5.32/webapps/'
+application_path = '/opt/apache-tomcat-8.5.35/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/test'
 wars = [
