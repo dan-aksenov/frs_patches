@@ -39,7 +39,7 @@ db_host = 'mo-ghkh-dev'
 db_name = 'dba_test'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
-stage_dir = 'c:/tmp/skpdi_patch_test'
+stage_dir = '/tmp/skpdi_patch_test'
 update_online = True
 
 d = PatchDatabase(
