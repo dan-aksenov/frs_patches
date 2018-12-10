@@ -54,7 +54,7 @@ class PatchDatabase:
         # Check if patch exists on Sunny
         if os.path.isdir( self.sunny_patch ) != True:
             print Bcolors.FAIL + "ERROR: No such patch on Sunny!" + Bcolors.ENDC
-            print "/tNo such directory " + self.sunny_patch
+            print "\tNo such directory " + self.sunny_patch
             sys.exit()
 
         # Clear temporary directory. May fall if somebody is "sitting" in it.
@@ -79,24 +79,24 @@ class PatchDatabase:
         
             # Compare installed patches with patches from Sunny.
             # If latest database patch version lower then on Sunny - install missing patches.
-            print "/nChecking database patch level:"
+            print "\nChecking database patch level:"
             # To handle file name suffixes for directories like "db_0190_20171113_v2.19" additional variable declared to hold max(patches_targ)
             last_patch_targ = max( patches_targ )
             last_patch_targ_strip = re.findall('db_.*_[0-9]{8}', last_patch_targ)[0] # findall returns list
             if last_patch_targ_strip == max(patches_curr):
-                print "/tDatabase patch level: " + max(patches_curr) 
-                print "/tLatest patch on Sunny: " + last_patch_targ_strip
-                print "/tNo database patch required./n"
+                print "\tDatabase patch level: " + max(patches_curr) 
+                print "\tLatest patch on Sunny: " + last_patch_targ_strip
+                print "\tNo database patch required.\n"
             elif last_patch_targ_strip > max(patches_curr):
-                print "/tDatabase patch level: " + max(patches_curr)
-                print "/tLatest patch on Sunny: " + last_patch_targ_strip
-                print "/tDatabase needs patching./n"
+                print "\tDatabase patch level: " + max(patches_curr)
+                print "\tLatest patch on Sunny: " + last_patch_targ_strip
+                print "\tDatabase needs patching.\n"
                 patches_miss = []
                 for i in (set(patches_targ) - set(patches_curr)):
                     if i > max(patches_curr):
                         patches_miss.append(i)
     
-                print "Following database patches will be applied: " + ', '.join(patches_miss) + "/n"
+                print "Following database patches will be applied: " + ', '.join(patches_miss) + "\n"
                 raw_input("Press Enter to continue...")
                 for i in patches_miss:
                 # Copy needed patches from Sunny.
@@ -107,7 +107,7 @@ class PatchDatabase:
     
             # Stop tomcat.
                 for i in self.application_hosts:
-                    print "Stopping application server " + i + ".../n"
+                    print "Stopping application server " + i + "...\n"
                     self.linux.linux_exec( i, 'sudo systemctl stop tomcat' )
                 # Apply database patches
                 # Using sort to execute patches in right order.
@@ -119,19 +119,19 @@ class PatchDatabase:
                     try:
                         logfile = open( self.stage_dir + '/patches/' + i + '/install_db_log.log' )
                     except:
-                        print Bcolors.FAIL + "/tUnable to read logfile" + self.stage_dir + "/patches/" + i + "/install_db_log.log. Somethnig wrong with installation./n" + Bcolors.ENDC
+                        print Bcolors.FAIL + "\tUnable to read logfile" + self.stage_dir + "/patches/" + i + "/install_db_log.log. Somethnig wrong with installation.\n" + Bcolors.ENDC
                         sys.exit()
                     loglines = logfile.read()
                     success_marker = loglines.find('finsih install patch')
                     if success_marker != -1:
-                        print Bcolors.OKGREEN + "/tDone./n" + Bcolors.ENDC
+                        print Bcolors.OKGREEN + "\tDone.\n" + Bcolors.ENDC
                     else:
-                        print Bcolors.FAIL + "/tError installing database patch. Examine logfile " + self.stage_dir + "/patches/" + i + "/install_db_log.log for details/n" + Bcolors.ENDC
+                        print Bcolors.FAIL + "\tError installing database patch. Examine logfile " + self.stage_dir + "/patches/" + i + "/install_db_log.log for details\n" + Bcolors.ENDC
                         sys.exit()
                     logfile.close()
           
             else:
-                print "/tDatabase patch level: " + max(patches_curr)
-                print "/t Latest patch on Sunny: " + last_patch_targ_strip
-                print Bcolors.FAIL + "ERROR: Something wrong with database patching!/n" + Bcolors.ENDC
+                print "\tDatabase patch level: " + max(patches_curr)
+                print "\t Latest patch on Sunny: " + last_patch_targ_strip
+                print Bcolors.FAIL + "ERROR: Something wrong with database patching!\n" + Bcolors.ENDC
                 sys.exit()
