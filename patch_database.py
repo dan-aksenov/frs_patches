@@ -44,7 +44,7 @@ class PatchDatabase:
         self.patch_table = patch_table
         self.linux = Deal_with_linux()
         # Send subprocess for database patching to null. Nothing interesting there anyway.
-        self.dnull = open("NUL", "w")
+        self.dnull = open(os.devnull, 'w')
         self.db_patch_file = 'db_patch.sh'
     
     def patchdb( self ):
