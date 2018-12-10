@@ -70,7 +70,7 @@ class PatchDatabase:
         patches_curr = postgres_exec ( self.db_host, self.db_name,  'select name from '+ self.patch_table +' order by id desc;' )[0]
     
         # Get list of patches from from Sunny
-        if os.path.isdir( self.sunny_patch + '\\patches' ) != True:
+        if os.path.isdir( self.sunny_patch + '/patches' ) != True:
             print "NOTICE: No database patch found in build. Assume database patching not required."
         else:
             patches_targ = [ name for name in os.listdir( self.sunny_patch + '\\patches' ) ]
