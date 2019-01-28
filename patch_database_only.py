@@ -17,16 +17,9 @@ import requests
 
 #Custom utilities
 from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
-    
-# NOTE: purge_panels to be moved to skpdi specific.
-
-#c = PatchDatabase(patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table)    
-
+  
 class PatchDatabase:
-    def __init__( self, patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table ):
-    #def __init__( self, jump_host, patch_num, self.sunny_path, application_hosts, ansible_inventory, patches_table ):
-        # intermediate host with ansible installation.
-        #self.jump_host = jump_host
+    def __init__( self, patch_num, sunny_path, db_host, db_name, stage_dir, db_user, patch_table ):
         self.patch_num = patch_num 
         self.db_host = db_host
         self.db_name = db_name
@@ -34,14 +27,8 @@ class PatchDatabase:
         self.stage_dir = stage_dir
         self.sunny_path = sunny_path
         self.sunny_patch = self.sunny_path + self.patch_num + '/'
-        # application hosts as writen in ansible invenrory
-        self.application_hosts = application_hosts
-        self.ansible_inventory = '~/ansible-hosts'
-        #self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
-        # patch_table - variable to hold db_patches_log(specific in different projects)
         self.patch_table = patch_table
         self.linux = Deal_with_linux()
-        # Send subprocess for database patching to null. Nothing interesting there anyway.
         self.dnull = open("NUL", "w")
         self.db_patch_file = 'db_patch.bat'
     
