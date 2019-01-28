@@ -24,7 +24,7 @@ for opt, arg in opts:
 # Variables
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
-application_hosts = ['centos7-test-1']
+application_hosts = ['cos7-sb1']
 # // so windows can also read in correctly
 sunny_path = '/sunny/builds/odsxp/'
 application_path = '/opt/apache-tomcat-8.5.37/webapps/'
