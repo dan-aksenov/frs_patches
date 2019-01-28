@@ -2,7 +2,35 @@
 
 ## Notes for running patch_database_only
 
-* database passwords should be supplied via pgpass ( on windows %HOME%\AppData\Roaming\postgresql\pgpass.conf).
+### Prerequesites
+
+* python 2.7
+
+Following python modules also required (might need to install them manually via pip install):
+
+* sys,
+* os,
+* shutil,
+* paramiko,
+* hashlib,
+* psycopg2,
+* glob,
+* getopt,
+* time,
+* termcolor,
+* subprocess,
+* re,
+* requests
+
+### Patch start example
+
+  parameters 1 - database host, 2 - database name, 3 - directory with pathes 4 - patch number
+
+   ``` cmd
+   patch_db_only.bat mo-ghkh-dev dba_test //sunny/builds/odsxp/ 3.8.6.1
+   ```
+
+* database passwords should be supplied via pgpass ( on windows %HOME%\AppData\Roaming\postgresql\pgpass.conf, but might be elsewhere).
 * simple execution in python:
 
    ``` python
