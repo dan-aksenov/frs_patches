@@ -1,7 +1,5 @@
-from application_update import ApplicationUpdate
 from patch_database_only import PatchDatabase
 import utils
-from skpdi_web import check_webpage
 
 from getopt import getopt
 import sys
