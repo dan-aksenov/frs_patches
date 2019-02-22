@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 # Fors patching scripts and programs.
-=======
-# Fors patching scripts and programms
->>>>>>> 946ec752aee721ef887fe558c30bf87f4fa7c5bd
 
 ## Notes for running patch_database_only
 
