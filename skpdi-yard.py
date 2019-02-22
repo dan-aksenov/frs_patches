@@ -36,7 +36,7 @@ wars = [
     ]
 
 db_host = 'gudhskpdi-db-03'
-db_name = 'ods_predprod'
+db_name = 'ods_yard'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch'
