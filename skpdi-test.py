@@ -40,7 +40,7 @@ db_name = 'dba_test'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch_test'
-update_online = True
+#update_online = True
 
 d = PatchDatabase(
     patch_num,
@@ -65,7 +65,7 @@ a = ApplicationUpdate(
     tomcat_name,
     ansible_inventory,
     wars,
-    update_online
+    #update_online
     )
 
 a.application_update()

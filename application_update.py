@@ -20,9 +20,6 @@ class ApplicationUpdate:
         self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
-        #if update_online is None:
-        #    update_online = False
-        #self.update_online = update_online
         self.linux = Deal_with_linux()
             
     def get_ansible_result( self, paramiko_result ):
@@ -103,4 +100,5 @@ class ApplicationUpdate:
                 print "Waiting 30 seconds for application to (re)deploy..."
                 sleep(30)
             else:
-                print "Something else"
+                print "Something wront with apps_to_update variable"
+                sys.exit()
