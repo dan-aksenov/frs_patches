@@ -1,4 +1,4 @@
-# Fors patching scripts and programs.
+# Fors patching scripts.
 
 ## Notes for running patch_database_only
 
