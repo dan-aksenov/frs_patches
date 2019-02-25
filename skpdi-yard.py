@@ -25,9 +25,8 @@ for opt, arg in opts:
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
 application_hosts = ['gudhskpdi-app-03']
-# // so windows can also read in correctly
 sunny_path = '//sunny/builds/odsxp/'
-application_path = '/u01/apache-tomcat-8.5.8/webapps/'
+application_path = '/opt/apache-tomcat-9.0.16/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/skpdi-prod'
 wars = [
@@ -40,7 +39,6 @@ db_name = 'ods_yard'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch'
-#update_online = True
 
 d = PatchDatabase(
     patch_num,
@@ -65,7 +63,6 @@ a = ApplicationUpdate(
     tomcat_name,
     ansible_inventory,
     wars,
-    #update_online
     )
 
 a.application_update()
