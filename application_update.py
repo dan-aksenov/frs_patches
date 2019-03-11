@@ -89,16 +89,16 @@ class ApplicationUpdate:
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src='  + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --become --become-user=tomcat' )
                     if 'SUCCESS' in paramiko_result:
                         print "\tSuccesfully updated application " + war[1] + " on " + application_host
-                        print "Waiting 30 seconds for application to (re)deploy..."
-                        sleep(30)
+                        print "Waiting 60 seconds for application to (re)deploy..."
+                        sleep(60)
                     else:
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit
                 # need to variablize tomcat service name
                 # Ensure tomcat is started.
                 self.deal_with_tomcat( application_host, 'tomcat', 'started' )
-                print "Waiting 30 seconds for application to (re)deploy..."
-                sleep(30)
+                print "Waiting 60 seconds for application to (re)deploy..."
+                sleep(60)
             else:
                 print "Something wront with apps_to_update variable"
                 sys.exit()
