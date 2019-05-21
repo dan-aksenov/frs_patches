@@ -68,7 +68,7 @@ class PatchDatabase:
         Database patching
         '''
         # Get list of already applied patches
-        # Function postgres_exec returns list - tuples + row count, here need only tuples, so [0]
+        # Function postgres_exec returns list - tuples + row count, need only tuples here, so [0]
         patches_curr = postgres_exec ( self.db_host, self.db_name,  'select name from '+ self.patch_table +' order by id desc;' )[0]
     
         # Get list of patches from from Sunny
@@ -105,7 +105,7 @@ class PatchDatabase:
                     shutil.copy(self.db_patch_file , self.stage_dir + '/patches/' + i)
                     os.chmod( self.stage_dir + '/patches/' + i + '/' + self.db_patch_file , stat.S_IRWXU)
     
-            # Stop tomcat.
+                # Stop tomcat.
                 for i in self.application_hosts:
                     print "Stopping application server " + i + "...\n"
                     self.linux.linux_exec( i, 'sudo systemctl stop tomcat' )
