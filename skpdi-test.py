@@ -27,7 +27,7 @@ jump_host = "oemcc.fors.ru"
 application_hosts = ['cos7-sb1']
 # // so windows can also read in correctly
 sunny_path = '/sunny/builds/odsxp/'
-application_path = '/opt/apache-tomcat-8.5.37/webapps/'
+application_path = '/opt/apache-tomcat-9.0.20/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/test'
 wars = [
@@ -54,7 +54,7 @@ d = PatchDatabase(
     patch_table
     )
 
-d.patchdb()
+#d.patchdb()
 
 a = ApplicationUpdate(
     jump_host,
