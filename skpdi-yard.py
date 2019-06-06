@@ -30,8 +30,8 @@ application_path = '/opt/apache-tomcat-9.0.16/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/skpdi-yard'
 wars = [
-    ['skpdi-' + patch_num + '.war', 'predprod'],
-    ['ext-' + patch_num + '.war', 'ext-predprod']
+    ['skpdi-' + patch_num + '.war', 'dt'],
+    ['ext-' + patch_num + '.war', 'ext-dt']
     ]
 
 db_host = 'gudhskpdi-db-03'
