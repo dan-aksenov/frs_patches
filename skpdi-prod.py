@@ -30,7 +30,7 @@ application_hosts = ['gudhskpdi-app-02', 'gudhskpdi-app-01', 'gudhskpdi-rcod-app
 # // so windows can also read it correctly, same as linux
 sunny_path = '//sunny/builds/odsxp/'
 # tomcat application location
-application_path = '/opt/apache-tomcat-9.0.20/webapps/'
+application_path = '/opt/tomcat/webapps/'
 # sysinit or systemd service name to stop/start server
 tomcat_name = 'tomcat'
 # war files mappings
