@@ -26,7 +26,7 @@ jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
 application_hosts = ['gudhskpdi-app-03']
 sunny_path = '//sunny/builds/odsxp/'
-application_path = '/opt/apache-tomcat-9.0.16/webapps/'
+application_path = '/opt/tomcat/webapps/'
 tomcat_name = 'tomcat'
 ansible_inventory = '~/ansible-hosts/skpdi-yard'
 wars = [
