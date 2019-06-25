@@ -24,11 +24,11 @@ for opt, arg in opts:
 # Variables
 # host to run ansible commands from
 jump_host = "oemcc.fors.ru"
-ansible_inventory = '~/ansible-hosts/skpdi-prod'
+ansible_inventory = '~/ansible-hosts/tula'
 # application hosts as writen in ansible invenrory
-application_hosts = ['']
+application_hosts = ['s-mintrans-app01','s-mintrans-app02']
 # // so windows can also read it correctly, same as linux
-sunny_path = '//sunny/builds/odsxp/Tula'
+sunny_path = '//sunny/builds/odsxp/Tula/'
 # tomcat application location
 application_path = '/opt/tomcat/webapps/'
 # sysinit or systemd service name to stop/start server
@@ -48,6 +48,7 @@ stage_dir = '/tmp/tula_patch'
 #update_online = True
 
 d = PatchDatabase(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,
@@ -74,7 +75,7 @@ a = ApplicationUpdate(
 
 a.application_update()
 
-print("Chekcking application version:")
-for host in application_hosts:
-    for app in wars:
-        check_webpage(patch_num, host, app[1])
+#print("Chekcking application version:")
+#for host in application_hosts:
+#    for app in wars:
+#        check_webpage(patch_num, host, app[1])

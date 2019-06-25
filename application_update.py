@@ -6,7 +6,8 @@ from utils import Deal_with_linux, Bcolors
 from time import sleep
 
 class ApplicationUpdate:
-    def __init__( self, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars ):
+    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars ):
+        self.jump_host = jump_host
         self.patch_num = patch_num
         self.sunny_path = sunny_path
         self.sunny_patch = sunny_path + patch_num + '/'
@@ -76,7 +77,7 @@ class ApplicationUpdate:
                     print( "\tNOTICE: Unable to find " + self.sunny_patch + war[0] + ". Assume it's not required." )
             if apps_to_update == []:
                 print ( Bcolors.OKGREEN + "\tApplications version on "+ application_host +" already " + self.patch_num + Bcolors.ENDC )
-                sys.exit()
+                #sys.exit()
             elif not apps_to_update == []:
                 self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
                 for war in apps_to_update:

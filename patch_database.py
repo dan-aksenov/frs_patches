@@ -8,6 +8,7 @@ from getopt import getopt
 from time import sleep
 # for coloured output
 from termcolor import colored
+import json
 
 import subprocess
 import shutil
@@ -23,10 +24,10 @@ from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
 #c = PatchDatabase(patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table)    
 
 class PatchDatabase:
-    def __init__( self, patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table ):
+    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table ):
     #def __init__( self, jump_host, patch_num, self.sunny_path, application_hosts, ansible_inventory, patches_table ):
         # intermediate host with ansible installation.
-        #self.jump_host = jump_host
+        self.jump_host = jump_host
         self.patch_num = patch_num 
         self.db_host = db_host
         self.db_name = db_name
@@ -36,8 +37,8 @@ class PatchDatabase:
         self.sunny_patch = self.sunny_path + self.patch_num + '/'
         # application hosts as writen in ansible invenrory
         self.application_hosts = application_hosts
-        self.ansible_inventory = '~/ansible-hosts'
-        #self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
+        self.ansible_inventory = ansible_inventory
+        self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # patch_table - variable to hold db_patches_log(specific in different projects)
         self.patch_table = patch_table
         self.linux = Deal_with_linux()
@@ -135,8 +136,8 @@ class PatchDatabase:
                     os.chmod( self.stage_dir + '/patches/' + i + '/' + self.db_patch_file , stat.S_IRWXU)
     
                 # Stop tomcat.
-                for i in self.application_hosts:
-                    self.deal_with_tomcat( application_host, 'tomcat', 'started' )
+                for application_host in self.application_hosts:
+                    self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
 
                 # Apply database patches
                 # Using sort to execute patches in right order.

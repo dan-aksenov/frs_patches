@@ -54,7 +54,7 @@ d = PatchDatabase(
     patch_table
     )
 
-#d.patchdb()
+d.patchdb()
 
 a = ApplicationUpdate(
     patch_num,
