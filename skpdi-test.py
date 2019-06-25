@@ -57,7 +57,6 @@ d = PatchDatabase(
 #d.patchdb()
 
 a = ApplicationUpdate(
-    jump_host,
     patch_num,
     sunny_path,
     application_hosts,

@@ -6,9 +6,7 @@ from utils import Deal_with_linux, Bcolors
 from time import sleep
 
 class ApplicationUpdate:
-    def __init__( self, jump_host, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars ):
-        # intermediate host with ansible installation.
-        self.jump_host = jump_host
+    def __init__( self, patch_num, sunny_path, application_hosts, application_path, tomcat_name, ansible_inventory, wars ):
         self.patch_num = patch_num
         self.sunny_path = sunny_path
         self.sunny_patch = sunny_path + patch_num + '/'
