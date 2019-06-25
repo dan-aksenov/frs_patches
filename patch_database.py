@@ -20,8 +20,6 @@ import stat
 #Custom utilities
 from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
     
-# NOTE: purge_panels to be moved to skpdi specific.
-
 #c = PatchDatabase(patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table)    
 
 class PatchDatabase:
