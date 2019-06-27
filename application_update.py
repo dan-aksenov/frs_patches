@@ -1,7 +1,5 @@
 import sys
-import json
 import os
-from glob import glob
 from utils import Deal_with_linux, Bcolors
 from time import sleep
 

@@ -1,20 +1,12 @@
 # for args and exit
 import sys
 import os
-# for war file search
-from glob import glob
-from getopt import getopt
 # for waiting
 from time import sleep
-# for coloured output
-from termcolor import colored
-import json
-
 import subprocess
 import shutil
 import os
 import re
-import requests
 # stat for chmod
 import stat
 
