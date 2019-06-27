@@ -41,7 +41,7 @@ class PatchDatabase:
         self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # patch_table - variable to hold db_patches_log(specific in different projects)
         self.patch_table = patch_table
-        self.linux = Deal_with_linux()
+        self.linux = Deal_with_linux( ansible_inventory )
         # Send subprocess for database patching to null. Nothing interesting there anyway.
         self.dnull = open(os.devnull, 'w')
         self.db_patch_file = 'db_patch.sh'

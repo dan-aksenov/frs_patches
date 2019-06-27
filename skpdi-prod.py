@@ -49,6 +49,7 @@ stage_dir = '/tmp/skpdi_patch'
 #update_online = True
 
 d = PatchDatabase(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,

@@ -41,6 +41,7 @@ patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch'
 
 d = PatchDatabase(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,
@@ -62,7 +63,7 @@ a = ApplicationUpdate(
     application_path,
     tomcat_name,
     ansible_inventory,
-    wars,
+    wars
     )
 
 a.application_update()

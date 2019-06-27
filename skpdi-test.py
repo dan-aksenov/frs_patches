@@ -43,6 +43,7 @@ stage_dir = '/tmp/skpdi_patch_test'
 #update_online = True
 
 d = PatchDatabase(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,
@@ -54,9 +55,10 @@ d = PatchDatabase(
     patch_table
     )
 
-d.patchdb()
+#d.patchdb()
 
 a = ApplicationUpdate(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,

@@ -23,7 +23,7 @@ class Bcolors:
 
 
 class Deal_with_linux:
-    def __init__(self):
+    def __init__(self, ansible_inventory):
         self.linux_key_path = os.getenv('HOME') + '/.ssh/id_rsa'
         if not os.path.isfile(self.linux_key_path):
             print Bcolors.FAIL + "\nERROR: Linux ssh key not found!" + Bcolors.ENDC
@@ -36,6 +36,9 @@ class Deal_with_linux:
         self.ssh_user = 'ansible'
         # SSH port
         self.ssh_port = 22
+        self.jump_host = 'oemcc.fors.ru'
+        self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
+        self.ansible_inventory = ansible_inventory
 
     def linux_exec(self, linux_host, shell_command):
         ''' Linux remote execution '''
@@ -107,7 +110,7 @@ class Deal_with_linux:
            - tomcat_state - tomcat desired state i.e stopped, started etc. '''
     
         print "Ensuring tomcat is " + tomcat_state + "..."
-        a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
+        a = self.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
         ansible_result = self.get_ansible_result(a)
         if ansible_result['state'] == tomcat_state:
             print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )

@@ -19,37 +19,7 @@ class ApplicationUpdate:
         self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
-        self.linux = Deal_with_linux()
-            
-    def get_ansible_result( self, paramiko_result ):
-        ''' Convert ansible-paramiko result(string) to json '''
-        
-        a = paramiko_result
-        #ansible_result = json.loads(a[a.find("{"):a.find("}")+1])
-        # upper string works incorrectly with multiple nested {}. Not shure if we need to propper terminate on last }?
-        try:
-            ansible_result = json.loads(a[a.find("{"):])
-        except:
-            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + ' ' + Bcolors.ENDC )
-        return ansible_result
-    
-    def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
-        ''' Start/stop tomcat application server
-        variables:
-           - tomcat_name is systemd service name
-           - tomcat_state - tomcat desired state i.e stopped, started etc. '''
-    
-        print "Ensuring tomcat is " + tomcat_state + "..."
-        a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
-        ansible_result = self.get_ansible_result(a)
-        if ansible_result['state'] == tomcat_state:
-            print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )
-        elif ansible_result['state'] <> tomcat_state:
-            print ( Bcolors.FAIL + "FAIL: tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
-            sys.exit()
-        else:
-            print ( Bcolors.FAIL + "FAIL: Error determining tomcat state!" +  Bcolors.ENDC )
-            sys.exit()
+        self.linux = Deal_with_linux( ansible_inventory )
 
     def application_update( self ):
         ''' Update application '''
@@ -61,7 +31,7 @@ class ApplicationUpdate:
                 if os.path.isfile( self.sunny_patch + war[0] ) == True:
                    # check if wars on app_host = wars from sunny
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src=' + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --check --become --become-user=tomcat' )
-                    ansible_result = self.get_ansible_result(paramiko_result)
+                    ansible_result = self.linux.get_ansible_result(paramiko_result)
                     # if changed add to apps_to_update list
                     if 'SUCCESS' in paramiko_result:
                         if ansible_result['changed'] == True:
@@ -79,7 +49,7 @@ class ApplicationUpdate:
                 print ( Bcolors.OKGREEN + "\tApplications version on "+ application_host +" already " + self.patch_num + Bcolors.ENDC )
                 #sys.exit()
             elif not apps_to_update == []:
-                self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
+                self.linux.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
                 for war in apps_to_update:
                     # Remove deployed folders.
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
@@ -93,7 +63,7 @@ class ApplicationUpdate:
                         sys.exit
                 # need to variablize tomcat service name
                 # Ensure tomcat is started.
-                self.deal_with_tomcat( application_host, 'tomcat', 'started' )
+                self.linux.deal_with_tomcat( application_host, 'tomcat', 'started' )
                 print "Waiting 60 seconds for application to (re)deploy..."
                 sleep(60)
             else:
