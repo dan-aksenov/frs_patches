@@ -28,7 +28,7 @@ application_hosts = ['gudhskpdi-app-03']
 sunny_path = '//sunny/builds/odsxp/'
 application_path = '/opt/tomcat/webapps/'
 tomcat_name = 'tomcat'
-ansible_inventory = '~/ansible-hosts/skpdi-yard'
+ansible_inventory = '~/ansible-hosts/skpdi_yard'
 wars = [
     ['skpdi-' + patch_num + '.war', 'dt'],
     ['ext-' + patch_num + '.war', 'ext-dt']
