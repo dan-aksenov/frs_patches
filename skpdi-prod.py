@@ -24,7 +24,7 @@ for opt, arg in opts:
 # Variables
 # host to run ansible commands from
 jump_host = "oemcc.fors.ru"
-ansible_inventory = '~/ansible-hosts/skpdi-prod'
+ansible_inventory = '~/ansible-hosts/skpdi_prod'
 # application hosts as writen in ansible invenrory
 application_hosts = ['gudhskpdi-app-02', 'gudhskpdi-app-01', 'gudhskpdi-rcod-app-01']
 # // so windows can also read it correctly, same as linux
