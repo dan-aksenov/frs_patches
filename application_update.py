@@ -29,17 +29,15 @@ class ApplicationUpdate:
                 if os.path.isfile( self.sunny_patch + war[0] ) == True:
                    # check if wars on app_host = wars from sunny
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src=' + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --check --become --become-user=tomcat' )
-                    ansible_result = self.linux.get_ansible_result(paramiko_result)
                     # if changed add to apps_to_update list
                     if 'CHANGED' in paramiko_result:
-                        #i if ansible_result['changed'] == True:
                         print "\t"+ war[1] + " application needs to be updated."
                         apps_to_update.append(war)
                     elif 'FAILED' in paramiko_result:
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit()
                     else:
-                        # do somethig if SUCCESS.
+                        # do somethig if SUCCESS?
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         #sys.exit()
                 else:
