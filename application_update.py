@@ -14,7 +14,7 @@ class ApplicationUpdate:
         self.application_path = application_path
         self.tomcat_name = tomcat_name
         self.ansible_inventory = ansible_inventory
-        self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
+        #self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
         self.linux = Deal_with_linux( ansible_inventory )
@@ -28,18 +28,19 @@ class ApplicationUpdate:
             for war in self.wars:
                 if os.path.isfile( self.sunny_patch + war[0] ) == True:
                    # check if wars on app_host = wars from sunny
-                    paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src=' + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --check --become --become-user=tomcat' )
+                    paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m copy -a "src=' + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --check --become --become-user=tomcat' )
                     # if changed add to apps_to_update list
                     if 'CHANGED' in paramiko_result:
                         print "\t"+ war[1] + " application needs to be updated."
                         apps_to_update.append(war)
+                    elif 'SUCCESS' in paramiko_result:
+                        pass
                     elif 'FAILED' in paramiko_result:
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
                         sys.exit()
                     else:
-                        # do somethig if SUCCESS?
                         print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
-                        #sys.exit()
+                        sys.exit()
                 else:
                     print( "\tNOTICE: Unable to find " + self.sunny_patch + war[0] + ". Assume it's not required." )
             if apps_to_update == []:
@@ -49,10 +50,10 @@ class ApplicationUpdate:
                 self.linux.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
                 for war in apps_to_update:
                     # Remove deployed folders.
-                    paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
+                    paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
                     # Perform war copy.
                     print "Attempt to copy "+ war[1] + " to " + application_host + "..."
-                    paramiko_result = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m copy -a "src='  + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --become --become-user=tomcat' )
+                    paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m copy -a "src='  + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --become --become-user=tomcat' )
                     if 'CHANGED' in paramiko_result:
                         print "\tSuccesfully updated application " + war[1] + " on " + application_host
                     else:

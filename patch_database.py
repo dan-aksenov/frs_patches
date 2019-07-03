@@ -30,44 +30,13 @@ class PatchDatabase:
         # application hosts as writen in ansible invenrory
         self.application_hosts = application_hosts
         self.ansible_inventory = ansible_inventory
-        self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
+        #self.ansible_#cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # patch_table - variable to hold db_patches_log(specific in different projects)
         self.patch_table = patch_table
         self.linux = Deal_with_linux( ansible_inventory )
         # Send subprocess for database patching to null. Nothing interesting there anyway.
         self.dnull = open(os.devnull, 'w')
         self.db_patch_file = 'db_patch.sh'
-
-    # Terporary place ansible result and dealt with tomcat here. to be moved to utils
-    def get_ansible_result( self, paramiko_result ):
-        ''' Convert ansible-paramiko result(string) to json '''
-
-        a = paramiko_result
-        #ansible_result = json.loads(a[a.find("{"):a.find("}")+1])
-        # upper string works incorrectly with multiple nested {}. Not shure if we need to propper terminate on last }?
-        try:
-            ansible_result = json.loads(a[a.find("{"):])
-        except:
-            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + ' ' + Bcolors.ENDC )
-        return ansible_result
-
-    def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
-        ''' Start/stop tomcat application server
-        variables:
-           - tomcat_name is systemd service name
-           - tomcat_state - tomcat desired state i.e stopped, started etc. '''
-
-        print "Ensuring tomcat is " + tomcat_state + "..."
-        a = self.linux.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
-        ansible_result = self.get_ansible_result(a)
-        if ansible_result['state'] == tomcat_state:
-            print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )
-        elif ansible_result['state'] <> tomcat_state:
-            print ( Bcolors.FAIL + "FAIL: tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
-            sys.exit()
-        else:
-            print ( Bcolors.FAIL + "FAIL: Error determining tomcat state!" +  Bcolors.ENDC )
-            sys.exit()
 
     def patchdb( self ):
         '''
@@ -129,7 +98,7 @@ class PatchDatabase:
     
                 # Stop tomcat.
                 for application_host in self.application_hosts:
-                    self.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
+                    self.linux.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
 
                 # Apply database patches
                 # Using sort to execute patches in right order.

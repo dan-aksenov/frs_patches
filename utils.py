@@ -92,7 +92,7 @@ class Deal_with_linux:
         transport.close()
 
     def get_ansible_result( self, paramiko_result ):
-        ''' Convert ansible-paramiko result(string) to json '''
+        ''' Convert ansible-paramiko result(string) to json. Function not used right now. To be removed... '''
         
         a = paramiko_result
         #ansible_result = json.loads(a[a.find("{"):a.find("}")+1])
@@ -110,15 +110,18 @@ class Deal_with_linux:
            - tomcat_state - tomcat desired state i.e stopped, started etc. '''
     
         print "Ensuring tomcat is " + tomcat_state + "..."
-        a = self.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
-        ansible_result = self.get_ansible_result(a)
-        if ansible_result['state'] == tomcat_state:
+        paramiko_result = self.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
+        
+        if 'CHANGED' in paramiko_result:
             print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )
-        elif ansible_result['state'] <> tomcat_state:
-            print ( Bcolors.FAIL + "FAIL: tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
+        elif 'FAILED' in paramiko_result:
+            print ( Bcolors.FAIL + "FAIL: Tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
             sys.exit()
+        elif 'SUCCESS' in paramiko_result:
+            print ( Bcolors.OKBLUE + "OK: Tomcat is already  " + tomcat_state + Bcolors.ENDC )
         else:
-            print ( Bcolors.FAIL + "FAIL: Error determining tomcat state!" +  Bcolors.ENDC )
+            print ( Bcolors.WARNING + "Error determining tomcat state!" +  Bcolors.ENDC )
+            print paramiko_result
             sys.exit()
 
 def md5_check(checked_file):
