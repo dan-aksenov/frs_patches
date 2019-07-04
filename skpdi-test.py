@@ -35,8 +35,8 @@ wars = [
     ['ext-' + patch_num + '.war', 'ext-predprod']
     ]
 
-db_host = 'mo-ghkh-dev'
-db_name = 'dba_test'
+db_host = 'gudhskpdi-db-03'
+db_name = 'ods_predprod'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch_test'
@@ -55,7 +55,7 @@ d = PatchDatabase(
     patch_table
     )
 
-#d.patchdb()
+d.patchdb()
 
 a = ApplicationUpdate(
     jump_host,
