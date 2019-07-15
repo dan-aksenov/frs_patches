@@ -87,7 +87,7 @@ class PatchDatabase:
                     if i > max(patches_curr):
                         patches_miss.append(i)
     
-                print "Following database patches will be applied: " + ', '.join(patches_miss) + "\n"
+                print "Following database patches will be applied: " + ', '.join(sorted(patches_miss)) + "\n"
                 raw_input("Press Enter to continue...")
                 for i in patches_miss:
                 # Copy needed patches from Sunny.
