@@ -10,25 +10,26 @@ import os
 # Get patch number and target environment from parameters n and t
 try:
     opts, args = getopt(sys.argv[1:], 'n:')
-except StandardError:
-    print "-n for patch number"
+except Exception:
+    print("-n for patch number")
     sys.exit()
 
 for opt, arg in opts:
     if opt in ('-n'):
         patch_num = arg
     else:
-        print "-n for patch number"
+        print("-n for patch number")
         sys.exit()
 
 # Variables
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-app-03']
-sunny_path = '//sunny/builds/odsxp/'
-application_path = '/opt/apache-tomcat-9.0.16/webapps/'
+application_hosts = ['gudhskpdi-ceph-02']
+# // so windows can also read in correctly
+sunny_path = '/sunny/builds/odsxp/'
+application_path = '/opt/tomcat/webapps/'
 tomcat_name = 'tomcat'
-ansible_inventory = '~/ansible-hosts/skpdi-prod'
+ansible_inventory = '~/ansible-hosts/skpdi_predprod'
 wars = [
     ['skpdi-' + patch_num + '.war', 'predprod'],
     ['ext-' + patch_num + '.war', 'ext-predprod']
@@ -38,9 +39,11 @@ db_host = 'gudhskpdi-db-03'
 db_name = 'ods_predprod'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
-stage_dir = '/tmp/skpdi_patch'
+stage_dir = '/tmp/skpdi_patch_test'
+#update_online = True
 
 d = PatchDatabase(
+    jump_host,
     patch_num,
     sunny_path,
     application_hosts,
@@ -63,6 +66,7 @@ a = ApplicationUpdate(
     tomcat_name,
     ansible_inventory,
     wars,
+    #update_online
     )
 
 a.application_update()
