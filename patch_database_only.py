@@ -23,7 +23,7 @@ class PatchDatabase:
 	    self.db_patch_file = 'db_patch.bat'
         elif os.name == 'posix':
 	    self.db_patch_file = 'db_patch.sh'
-        else
+        else:
             print( Bcolors.FAIL + "Unable to determine OS type " + Bcolors.ENDC )
             sys.exit()
     
