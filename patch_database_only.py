@@ -1,22 +1,12 @@
 # for args and exit
 import sys
 import os
-# for war file search
-from glob import glob
-from getopt import getopt
-# for waiting
-from time import sleep
-# for coloured output
-from termcolor import colored
-
 import subprocess
 import shutil
-import os
 import re
-import requests
 
 #Custom utilities
-from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
+from utils import recreate_dir, postgres_exec, Bcolors
   
 class PatchDatabase:
     def __init__( self, patch_num, sunny_path, db_host, db_name, stage_dir, db_user, patch_table ):
@@ -28,9 +18,14 @@ class PatchDatabase:
         self.sunny_path = sunny_path
         self.sunny_patch = self.sunny_path + self.patch_num + '/'
         self.patch_table = patch_table
-        self.linux = Deal_with_linux()
         self.dnull = open("NUL", "w")
-        self.db_patch_file = 'db_patch.bat'
+        if os.name == 'nt':
+	    self.db_patch_file = 'db_patch.bat'
+        elif os.name == 'posix':
+	    self.db_patch_file = 'db_patch.sh'
+        else
+            print( Bcolors.FAIL + "Unable to determine OS type " + Bcolors.ENDC )
+            sys.exit()
     
     def patchdb( self ):
         '''
