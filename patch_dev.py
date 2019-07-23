@@ -7,9 +7,9 @@ import os
 
 # Get patch number and target environment from parameters n and t
 try:
-    opts, args = getopt(sys.argv[1:], 'h:d:p:n:')
+    opts, args = getopt(sys.argv[1:], 'h:d:p:n:t:')
 except Exception:
-    print("-h database host -d database name -p directory with patches -n patch number")
+    print("-h database host -d database name -p directory with patches -n patch number -t for staging directory for temporary storage")
     sys.exit()
 
 for opt, arg in opts:
@@ -21,13 +21,14 @@ for opt, arg in opts:
         sunny_path = arg
     elif opt in ('-n'):
         patch_num = arg
+    elif opt in ('-t'):
+        stage_dir = arg
     else:
         print("-n for patch number")
         sys.exit()
 
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
-stage_dir = 'c:/tmp/skpdi_patch_test'
 
 d = PatchDatabase(
     patch_num,
