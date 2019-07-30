@@ -24,7 +24,7 @@ for opt, arg in opts:
 # Variables
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-app-03']
+application_hosts = ['gudhskpdi-app-03', 'gudhskpdi-rcod-app-03']
 sunny_path = '//sunny/builds/odsxp/'
 application_path = '/opt/tomcat/webapps/'
 tomcat_name = 'tomcat'
