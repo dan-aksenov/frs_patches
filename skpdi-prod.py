@@ -26,7 +26,7 @@ for opt, arg in opts:
 jump_host = "oemcc.fors.ru"
 ansible_inventory = '~/ansible-hosts/skpdi_prod'
 # application hosts as writen in ansible invenrory
-application_hosts = ['gudhskpdi-app-02', 'gudhskpdi-app-01', 'gudhskpdi-rcod-app-01']
+application_hosts = ['gudhskpdi-app-02', 'gudhskpdi-app-01', 'gudhskpdi-rcod-app-01', 'gudhskpdi-rcod-app-02' ]
 # // so windows can also read it correctly, same as linux
 sunny_path = '//sunny/builds/odsxp/'
 # tomcat application location
