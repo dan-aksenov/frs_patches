@@ -11,6 +11,7 @@ import json
 # for postgresql connection
 from psycopg2 import connect
 
+
 class Bcolors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
@@ -125,7 +126,10 @@ class Deal_with_linux:
             sys.exit()
 
 def md5_check(checked_file):
-    ''' *.war file md5 check '''
+    ''' *.war file md5 check 
+    >>> md5_check( '/etc/hosts' )
+    '52ba68c508dd6249de445291720eb96f'
+    '''
     
     md5sum = hashlib.md5(open(checked_file,'rb').read()).hexdigest()
     return md5sum
