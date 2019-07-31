@@ -11,7 +11,7 @@ import re
 import stat
 
 #Custom utilities
-from utils import recreate_dir, Deal_with_linux, postgres_exec, Bcolors
+from utils import utils, linux, pgsql, colours
     
 #c = PatchDatabase(patch_num, sunny_path, application_hosts, ansible_inventory, db_host, db_name, stage_dir, db_user, patch_table)    
 
@@ -33,7 +33,7 @@ class PatchDatabase:
         #self.ansible_#cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # patch_table - variable to hold db_patches_log(specific in different projects)
         self.patch_table = patch_table
-        self.linux = Deal_with_linux( ansible_inventory )
+        self.linux = linux.Deal_with_linux( ansible_inventory )
         # Send subprocess for database patching to null. Nothing interesting there anyway.
         self.dnull = open(os.devnull, 'w')
         self.db_patch_file = 'db_patch.sh'
@@ -44,15 +44,15 @@ class PatchDatabase:
         '''
         # Check if patch exists on Sunny
         if os.path.isdir( self.sunny_patch ) != True:
-            print Bcolors.FAIL + "ERROR: No such patch on Sunny!" + Bcolors.ENDC
+            print colours.Bcolors.FAIL + "ERROR: No such patch on Sunny!" + colours.Bcolors.ENDC
             print "\tNo such directory " + self.sunny_patch
             sys.exit()
 
         # Clear temporary directory. May fall if somebody is "sitting" in it.
         try:
-            recreate_dir( self.stage_dir )
+            utils.recreate_dir( self.stage_dir )
         except:
-            print Bcolors.FAIL + "ERROR: Unable to recreate patch staging directory." + Bcolors.ENDC
+            print colours.Bcolors.FAIL + "ERROR: Unable to recreate patch staging directory." + colours.Bcolors.ENDC
             sys.exit()
     
         '''
@@ -60,11 +60,11 @@ class PatchDatabase:
         '''
         # Get list of already applied patches
         # Function postgres_exec returns list - tuples + row count, need only tuples here, so [0]
-        patches_curr = postgres_exec ( self.db_host, self.db_name,  'select name from '+ self.patch_table +' order by id desc;' )[0]
+        patches_curr = pgsql.postgres_exec ( self.db_host, self.db_name,  'select name from '+ self.patch_table +' order by id desc;' )[0]
     
         # Get list of patches from from Sunny
         if os.path.isdir( self.sunny_patch + '/patches' ) != True:
-            print "NOTICE: No database patch found in build. Assume database patching not required."
+            print( "NOTICE: No database patch found in build. Assume database patching not required. Current schema version is " + max( patches_curr ))
         else:
             patches_targ = [ name for name in os.listdir( self.sunny_patch + '/patches' ) ]
         
@@ -110,19 +110,19 @@ class PatchDatabase:
                     try:
                         logfile = open( self.stage_dir + '/patches/' + i + '/install_db_log.log' )
                     except:
-                        print Bcolors.FAIL + "\tUnable to read logfile" + self.stage_dir + "/patches/" + i + "/install_db_log.log. Somethnig wrong with installation.\n" + Bcolors.ENDC
+                        print colours.Bcolors.FAIL + "\tUnable to read logfile" + self.stage_dir + "/patches/" + i + "/install_db_log.log. Somethnig wrong with installation.\n" + colours.Bcolors.ENDC
                         sys.exit()
                     loglines = logfile.read()
                     success_marker = loglines.find('finsih install patch')
                     if success_marker != -1:
-                        print Bcolors.OKGREEN + "\tDone.\n" + Bcolors.ENDC
+                        print colours.Bcolors.OKGREEN + "\tDone.\n" + colours.Bcolors.ENDC
                     else:
-                        print Bcolors.FAIL + "\tError installing database patch. Examine logfile " + self.stage_dir + "/patches/" + i + "/install_db_log.log for details\n" + Bcolors.ENDC
+                        print colours.Bcolors.FAIL + "\tError installing database patch. Examine logfile " + self.stage_dir + "/patches/" + i + "/install_db_log.log for details\n" + colours.Bcolors.ENDC
                         sys.exit()
                     logfile.close()
           
             else:
                 print "\tDatabase patch level: " + max(patches_curr)
                 print "\t Latest patch on Sunny: " + last_patch_targ_strip
-                print Bcolors.FAIL + "ERROR: Something wrong with database patching!\n" + Bcolors.ENDC
+                print colours.Bcolors.FAIL + "ERROR: Something wrong with database patching!\n" + colours.Bcolors.ENDC
                 sys.exit()

@@ -4,24 +4,8 @@ import os
 import shutil
 # for ssh connection and ftp transfer.
 import paramiko
-# for file md5s
-import hashlib
 # to parse ansible results
 import json
-# for postgresql connection
-from psycopg2 import connect
-
-
-class Bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
 
 class Deal_with_linux:
     def __init__(self, ansible_inventory):
@@ -124,46 +108,3 @@ class Deal_with_linux:
             print ( Bcolors.WARNING + "Error determining tomcat state!" +  Bcolors.ENDC )
             print paramiko_result
             sys.exit()
-
-def md5_check(checked_file):
-    ''' *.war file md5 check 
-    >>> md5_check( '/etc/hosts' )
-    '52ba68c508dd6249de445291720eb96f'
-    '''
-    
-    md5sum = hashlib.md5(open(checked_file,'rb').read()).hexdigest()
-    return md5sum
-
-def recreate_dir(dir_name):
-    ''' Recreate Windows directory '''
-    
-    if os.path.exists(dir_name):
-        shutil.rmtree(dir_name)
-    else:
-        os.makedirs(dir_name)
-
-def postgres_exec(db_host, db_name, sql_query):
-    ''' SQL execution '''
-
-    # pgpass shoule be used insead of password
-    conn_string = 'dbname= ' + db_name + ' user=''postgres'' host=' + db_host
-    try:
-        conn = connect(conn_string)
-    except:
-        print Bcolors.FAIL + "\nERROR: unable to connect to the database!" + Bcolors.ENDC
-        print "HINT: Is .pgpass present and correct?"
-        sys.exit()
-    cur = conn.cursor()
-    cur.execute(sql_query)
-    query_results = []
-    # This check needed, because delete doesn't return cursor
-    if cur.description is not None:
-        rows = cur.fetchall()
-        # Need list of stings instead of tuples for future manipulation.
-        for row in rows:
-            query_results.append(row[0])
-    rowcnt = cur.rowcount
-    conn.commit()
-    cur.close()
-    conn.close()
-    return query_results, rowcnt

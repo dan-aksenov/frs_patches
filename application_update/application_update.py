@@ -1,6 +1,6 @@
 import sys
 import os
-from utils import Deal_with_linux, Bcolors
+from utils import linux, colours 
 from time import sleep
 
 class ApplicationUpdate:
@@ -17,7 +17,7 @@ class ApplicationUpdate:
         #self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
-        self.linux = Deal_with_linux( ansible_inventory )
+        self.linux = linux.Deal_with_linux( ansible_inventory )
 
     def application_update( self ):
         ''' Update application '''
@@ -36,15 +36,15 @@ class ApplicationUpdate:
                     elif 'SUCCESS' in paramiko_result:
                         pass
                     elif 'FAILED' in paramiko_result:
-                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
+                        print ( colours.Bcolors.FAIL + paramiko_result + colours.Bcolors.ENDC )
                         sys.exit()
                     else:
-                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
+                        print ( colours.Bcolors.FAIL + paramiko_result + colours.Bcolors.ENDC )
                         sys.exit()
                 else:
                     print( "\tNOTICE: Unable to find " + self.sunny_patch + war[0] + ". Assume it's not required." )
             if apps_to_update == []:
-                print ( Bcolors.OKGREEN + "\tApplications version on "+ application_host +" already " + self.patch_num + Bcolors.ENDC )
+                print ( colours.Bcolors.OKGREEN + "\tApplications version on "+ application_host +" already " + self.patch_num + colours.Bcolors.ENDC )
                 #sys.exit()
             elif not apps_to_update == []:
                 self.linux.deal_with_tomcat( application_host, 'tomcat', 'stopped' )
@@ -57,7 +57,7 @@ class ApplicationUpdate:
                     if 'CHANGED' in paramiko_result:
                         print "\tSuccesfully updated application " + war[1] + " on " + application_host
                     else:
-                        print ( Bcolors.FAIL + paramiko_result + Bcolors.ENDC )
+                        print ( colours.Bcolors.FAIL + paramiko_result + colours.Bcolors.ENDC )
                         sys.exit
                 # need to variablize tomcat service name
                 # Ensure tomcat is started.
