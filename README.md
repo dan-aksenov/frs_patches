@@ -4,7 +4,7 @@
 
 ### Prerequesites
 
-* python 2.7
+* python 3 !
 
 Following python modules also required (might need to install them manually via pip install):
 
