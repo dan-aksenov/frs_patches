@@ -6,13 +6,14 @@ import shutil
 import paramiko
 # to parse ansible results
 import json
+from . import colours
 
 class Deal_with_linux:
     def __init__(self, ansible_inventory):
         self.linux_key_path = os.getenv('HOME') + '/.ssh/id_rsa'
         if not os.path.isfile(self.linux_key_path):
-            print Bcolors.FAIL + "\nERROR: Linux ssh key not found!" + Bcolors.ENDC
-            print "HINT: Make sure \"" + self.linux_key_path + "\" exists."
+            print( colours.Bcolors.FAIL + "\nERROR: Linux ssh key not found!" + colours.Bcolors.ENDC )
+            print( "HINT: Make sure \"" + self.linux_key_path + "\" exists." )
             sys.exit()
 
         # Prepare key for paramiko.
@@ -33,10 +34,10 @@ class Deal_with_linux:
         try:
             client.connect(hostname=linux_host, username=self.ssh_user, port=self.ssh_port, pkey=self.linux_key)
         except:
-            print Bcolors.FAIL + "\nERROR: unable to execute on Linux machine!" + Bcolors.ENDC
+            print( colours.Bcolors.FAIL + "\nERROR: unable to execute on Linux machine!" + colours.Bcolors.ENDC )
             sys.exit()
         stdin, stdout, stderr = client.exec_command(shell_command)
-        data = stdout.read() + stderr.read()
+        data = (stdout.read() + stderr.read()).decode('ascii').strip("\n")
         client.close()
         return data
 
@@ -47,7 +48,7 @@ class Deal_with_linux:
         try:
             transport.connect(username=self.ssh_user, pkey=self.linux_key)
         except:
-            print Bcolors.FAIL + "\nERROR: unable to copy to Linux machine!" + Bcolors.ENDC
+            print( colours.Bcolors.FAIL + "\nERROR: unable to copy to Linux machine!" + colours.Bcolors.ENDC )
             sys.exit()
         sftp = paramiko.SFTPClient.from_transport(transport)
     
@@ -65,7 +66,7 @@ class Deal_with_linux:
         try:
             transport.connect(username=self.ssh_user, pkey=self.linux_key)
         except:
-            print Bcolors.FAIL + "\nERROR: unable to copy to Linux machine!" + Bcolors.ENDC
+            print( colours.Bcolors.FAIL + "\nERROR: unable to copy to Linux machine!" + colours.Bcolors.ENDC )
             sys.exit()
         sftp = paramiko.SFTPClient.from_transport(transport)
  
@@ -85,7 +86,7 @@ class Deal_with_linux:
         try:
             ansible_result = json.loads(a[a.find("{"):])
         except:
-            print( Bcolors.FAIL + 'ERROR: ' + paramiko_result + ' ' + Bcolors.ENDC )
+            print( colours.Bcolors.FAIL + 'ERROR: ' + paramiko_result + ' ' + colours.Bcolors.ENDC )
         return ansible_result
     
     def deal_with_tomcat( self, application_host, tomcat_name, tomcat_state ):
@@ -94,17 +95,17 @@ class Deal_with_linux:
            - tomcat_name is systemd service name
            - tomcat_state - tomcat desired state i.e stopped, started etc. '''
     
-        print "Ensuring tomcat is " + tomcat_state + "..."
+        print( "Ensuring tomcat is " + tomcat_state + "..." )
         paramiko_result = self.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
         
         if 'CHANGED' in paramiko_result:
-            print ( Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + Bcolors.ENDC )
+            print( colours.Bcolors.OKBLUE + "OK: Tomcat " + tomcat_state + colours.Bcolors.ENDC )
         elif 'FAILED' in paramiko_result:
-            print ( Bcolors.FAIL + "FAIL: Tomcat not " + tomcat_state + "!" + Bcolors.ENDC )
+            print( colours.Bcolors.FAIL + "FAIL: Tomcat not " + tomcat_state + "!" + colours.Bcolors.ENDC )
             sys.exit()
         elif 'SUCCESS' in paramiko_result:
-            print ( Bcolors.OKBLUE + "OK: Tomcat is already  " + tomcat_state + Bcolors.ENDC )
+            print( colours.Bcolors.OKBLUE + "OK: Tomcat is already  " + tomcat_state + colours.Bcolors.ENDC )
         else:
-            print ( Bcolors.WARNING + "Error determining tomcat state!" +  Bcolors.ENDC )
-            print paramiko_result
+            print( colours.Bcolors.WARNING + "Error determining tomcat state!" +  colours.Bcolors.ENDC )
+            print( paramiko_result )
             sys.exit()

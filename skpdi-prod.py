@@ -1,7 +1,7 @@
-from application_update import ApplicationUpdate
-from patch_database import PatchDatabase
+from application_update import application_update
+from patch_database import patch_database
 import utils
-from skpdi_web import check_webpage
+from skpdi_web import skpdi_web
 
 from getopt import getopt
 import sys
@@ -48,7 +48,7 @@ patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch'
 #update_online = True
 
-d = PatchDatabase(
+d = patch_database.PatchDatabase(
     jump_host,
     patch_num,
     sunny_path,
@@ -59,11 +59,11 @@ d = PatchDatabase(
     stage_dir,
     db_user,
     patch_table
-   )
+    )
 
 d.patchdb()
 
-a = ApplicationUpdate(
+a = application_update.ApplicationUpdate(
     jump_host,
     patch_num,
     sunny_path,
@@ -71,13 +71,12 @@ a = ApplicationUpdate(
     application_path,
     tomcat_name,
     ansible_inventory,
-    wars,
-    #update_online
-   )
+    wars
+    )
 
 a.application_update()
 
 print("Chekcking application version:")
 for host in application_hosts:
     for app in wars:
-        check_webpage(patch_num, host, app[1])
+        skpdi_web.check_webpage(patch_num, host, app[1])

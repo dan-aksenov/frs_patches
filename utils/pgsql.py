@@ -9,8 +9,7 @@ def postgres_exec(db_host, db_name, sql_query):
     try:
         conn = connect(conn_string)
     except:
-        print Bcolors.FAIL + "\nERROR: unable to connect to the database!" + Bcolors.ENDC
-        print "HINT: Is .pgpass present and correct?"
+        print( Bcolors.FAIL + "\nERROR: unable to connect to the database!" + Bcolors.ENDC )
         sys.exit()
     cur = conn.cursor()
     cur.execute(sql_query)

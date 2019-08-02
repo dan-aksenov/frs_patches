@@ -1,6 +1,5 @@
-from patch_database_only import PatchDatabase
+from patch_database import patch_database_only
 import utils
-
 from getopt import getopt
 import sys
 import os
@@ -30,7 +29,7 @@ for opt, arg in opts:
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 
-d = PatchDatabase(
+d = patch_database_only.PatchDatabase(
     patch_num,
     sunny_path,
     db_host,

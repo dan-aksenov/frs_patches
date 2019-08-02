@@ -22,7 +22,7 @@ class ApplicationUpdate:
     def application_update( self ):
         ''' Update application '''
         for application_host in self.application_hosts:
-            print "Checking application files on " + application_host +":"
+            print( "Checking application files on " + application_host +":" )
             # apps_to_update will hold application names to be updated, so uptodate applications won't be undeployed.
             apps_to_update = []
             for war in self.wars:
@@ -31,7 +31,7 @@ class ApplicationUpdate:
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m copy -a "src=' + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --check --become --become-user=tomcat' )
                     # if changed add to apps_to_update list
                     if 'CHANGED' in paramiko_result:
-                        print "\t"+ war[1] + " application needs to be updated."
+                        print( "\t"+ war[1] + " application needs to be updated." )
                         apps_to_update.append(war)
                     elif 'SUCCESS' in paramiko_result:
                         pass
@@ -52,18 +52,18 @@ class ApplicationUpdate:
                     # Remove deployed folders.
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m file -a "path=' + self.application_path + war[1] + ' state=absent" --become' )
                     # Perform war copy.
-                    print "Attempt to copy "+ war[1] + " to " + application_host + "..."
+                    print( "Attempt to copy "+ war[1] + " to " + application_host + "..." )
                     paramiko_result = self.linux.linux_exec( self.jump_host, self.linux.ansible_cmd_template + application_host + ' -m copy -a "src='  + self.sunny_patch + war[0] + ' dest=' + self.application_path + war[1] + '.war" --become --become-user=tomcat' )
                     if 'CHANGED' in paramiko_result:
-                        print "\tSuccesfully updated application " + war[1] + " on " + application_host
+                        print( "\tSuccesfully updated application " + war[1] + " on " + application_host )
                     else:
                         print ( colours.Bcolors.FAIL + paramiko_result + colours.Bcolors.ENDC )
                         sys.exit
                 # need to variablize tomcat service name
                 # Ensure tomcat is started.
                 self.linux.deal_with_tomcat( application_host, 'tomcat', 'started' )
-                print "Waiting 60 seconds for application to (re)deploy..."
+                print( "Waiting 60 seconds for application to (re)deploy..." )
                 sleep(60)
             else:
-                print "Something wrong with apps_to_update variable"
+                print( "Something wrong with apps_to_update variable" )
                 sys.exit()
