@@ -4,6 +4,9 @@ from getopt import getopt
 import sys
 import os
 
+if sys.version_info[0] < 3:
+   raise Exception("Must be using Python 3!")
+
 # Get patch number and target environment from parameters n and t
 try:
     opts, args = getopt(sys.argv[1:], 'h:d:p:n:t:')
