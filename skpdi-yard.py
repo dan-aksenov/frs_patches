@@ -11,14 +11,14 @@ import os
 try:
     opts, args = getopt(sys.argv[1:], 'n:')
 except StandardError:
-    print "-n for patch number"
+    print("-n for patch number")
     sys.exit()
 
 for opt, arg in opts:
     if opt in ('-n'):
         patch_num = arg
     else:
-        print "-n for patch number"
+        print("-n for patch number")
         sys.exit()
 
 # Variables
