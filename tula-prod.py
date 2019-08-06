@@ -1,7 +1,7 @@
-from application_update import ApplicationUpdate
-from patch_database import PatchDatabase
+from application_update import application_update
+from patch_database import patch_database
 import utils
-from skpdi_web import check_webpage
+from skpdi_web import skpdi_web
 
 from getopt import getopt
 import sys
@@ -11,14 +11,14 @@ import os
 try:
     opts, args = getopt(sys.argv[1:], 'n:')
 except StandardError:
-    print "-n for patch number"
+    print("-n for patch number")
     sys.exit()
 
 for opt, arg in opts:
     if opt in ('-n'):
         patch_num = arg
     else:
-        print "-n for patch number"
+        print("-n for patch number")
         sys.exit()
 
 # Variables
@@ -47,7 +47,7 @@ patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/tula_patch'
 #update_online = True
 
-d = PatchDatabase(
+d = patch_database.PatchDatabase(
     jump_host,
     patch_num,
     sunny_path,
@@ -58,11 +58,11 @@ d = PatchDatabase(
     stage_dir,
     db_user,
     patch_table
-   )
+    )
 
 d.patchdb()
 
-a = ApplicationUpdate(
+a = application_update.ApplicationUpdate(
     jump_host,
     patch_num,
     sunny_path,
@@ -70,8 +70,8 @@ a = ApplicationUpdate(
     application_path,
     tomcat_name,
     ansible_inventory,
-    wars,
-   )
+    wars
+    )
 
 a.application_update()
 
