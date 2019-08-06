@@ -1,5 +1,7 @@
 # for postgresql connection
 from psycopg2 import connect
+from . import colours
+import sys
 
 def postgres_exec(db_host, db_name, sql_query):
     ''' SQL execution '''
@@ -9,7 +11,7 @@ def postgres_exec(db_host, db_name, sql_query):
     try:
         conn = connect(conn_string)
     except:
-        print( Bcolors.FAIL + "\nERROR: unable to connect to the database!" + Bcolors.ENDC )
+        print( colours.Bcolors.FAIL + "\nERROR: unable to connect to the database!" + colours.Bcolors.ENDC )
         sys.exit()
     cur = conn.cursor()
     cur.execute(sql_query)
