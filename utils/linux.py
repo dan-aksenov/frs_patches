@@ -95,7 +95,7 @@ class Deal_with_linux:
            - tomcat_name is systemd service name
            - tomcat_state - tomcat desired state i.e stopped, started etc. '''
     
-        print( "Ensuring tomcat is " + tomcat_state + "..." )
+        print( "Ensuring " + tomcat_name + " is " + tomcat_state + "..." )
         paramiko_result = self.linux_exec( self.jump_host, self.ansible_cmd_template + application_host + ' -m service -a "name=' + tomcat_name + ' state=' + tomcat_state + '" --become')
         
         if 'CHANGED' in paramiko_result:
