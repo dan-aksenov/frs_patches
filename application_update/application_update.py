@@ -14,7 +14,6 @@ class ApplicationUpdate:
         self.application_path = application_path
         self.tomcat_name = tomcat_name
         self.ansible_inventory = ansible_inventory
-        #self.ansible_cmd_template = 'ansible -i ' + ansible_inventory + ' '
         # war files mappings. example [ 'pts-integration-' + patch_num + '.war', 'integration' ].
         self.wars = wars
         self.linux = linux.Deal_with_linux( ansible_inventory )
