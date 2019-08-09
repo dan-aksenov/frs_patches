@@ -25,7 +25,6 @@ for opt, arg in opts:
 jump_host = "oemcc.fors.ru"
 # application hosts as writen in ansible invenrory
 application_hosts = ['cos7-sb2']
-# // so windows can also read in correctly
 sunny_path = '/sunny/builds/odsxp/'
 application_path = '/opt/tomcat/webapps/'
 tomcat_name = 'tomcat'
@@ -40,7 +39,6 @@ db_name = 'dba_test'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch_test'
-#update_online = True
 
 d = patch_database.PatchDatabase(
     jump_host,
