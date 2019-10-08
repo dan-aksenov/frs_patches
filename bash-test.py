@@ -24,27 +24,28 @@ for opt, arg in opts:
 # Variables
 # host to run ansible commands from
 jump_host = "oemcc.fors.ru"
-ansible_inventory = '~/ansible-hosts/record_tula'
+ansible_inventory = '~/ansible-hosts/record-bash'
 # application hosts as writen in ansible invenrory
-application_hosts = ['record-tula']
+application_hosts = ['record-bash']
 # // so windows can also read it correctly, same as linux
-sunny_path = '/sunny/builds/odsxp/'
+sunny_path = '//sunny/builds/odsxp/'
 # tomcat application location
 application_path = '/opt/tomcat/webapps/'
 # sysinit or systemd service name to stop/start server
 tomcat_name = 'tomcat'
 # war files mappings
 wars = [
-    ['r71-tula-' + patch_num + '.war', 'app']
+    ['skpdi-' + patch_num + '.war', 'bash'],
     ]
 
 db_host = 'mo-ghkh-dev'
-db_name = 'ods_tula'
+db_name = 'ods_bash'
 db_user = 'ods'
 # databaes table to look for current db_version
 patch_table = 'parameter.fdc_patches_log'
 # temporary directory to hold database patches.
-stage_dir = '/tmp/demo_tula_patch'
+stage_dir = '/tmp/skpdi_patch'
+#update_online = True
 
 d = patch_database.PatchDatabase(
     jump_host,
@@ -61,6 +62,7 @@ d = patch_database.PatchDatabase(
 
 d.patchdb()
 
+'''
 a = application_update.ApplicationUpdate(
     jump_host,
     patch_num,
@@ -72,5 +74,10 @@ a = application_update.ApplicationUpdate(
     wars
     )
 
-#a.application_update()
+a.application_update()
 
+print("Chekcking application version:")
+for host in application_hosts:
+    for app in wars:
+        skpdi_web.check_webpage(patch_num, host, app[1])
+'''
