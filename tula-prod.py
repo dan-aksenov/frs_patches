@@ -28,7 +28,7 @@ ansible_inventory = '~/ansible-hosts/tula'
 # application hosts as writen in ansible invenrory
 application_hosts = ['s-mintrans-app01','s-mintrans-app02']
 # // so windows can also read it correctly, same as linux
-sunny_path = '//sunny/builds/odsxp/Tula/'
+sunny_path = '//sunny/builds/odsxp/r71-tula/'
 # tomcat application location
 application_path = '/opt/tomcat/webapps/'
 # sysinit or systemd service name to stop/start server

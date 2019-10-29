@@ -39,7 +39,7 @@ wars = [
     ]
 
 db_host = 'mo-ghkh-dev'
-db_name = 'ods_tula'
+db_name = 'ods_tula_prod'
 db_user = 'ods'
 # databaes table to look for current db_version
 patch_table = 'parameter.fdc_patches_log'
