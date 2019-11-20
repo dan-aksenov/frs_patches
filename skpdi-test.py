@@ -34,8 +34,8 @@ wars = [
     ['ext-' + patch_num + '.war', 'ext-predprod']
     ]
 
-db_host = 'mo-ghkh-dev'
-db_name = 'dba_test'
+db_host = 'cos7-sb2'
+db_name = 'test'
 db_user = 'ods'
 patch_table = 'parameter.fdc_patches_log'
 stage_dir = '/tmp/skpdi_patch_test'
